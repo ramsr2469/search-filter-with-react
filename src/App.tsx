@@ -2,12 +2,14 @@ import {useState, useEffect, ChangeEvent} from 'react';
 import './App.css';
 import axios from "axios";
 import Card from "./Card";
+import Pagination  from './Pagination';
 
 
 function App() {
 
   const [data, setData] = useState<any>({});
   const [searchInput, setSearchInput] = useState<string>('');
+  const [loading, setLoading]= useState(false);
 
   const [paginations, setPaginations] = useState<any>([]);
 
@@ -28,9 +30,11 @@ function App() {
 
   const fetchData = async (url: string) => {
     setData([]);
+    setLoading(true);
     const response = await axios.get(url);
     setData(response.data);
     preparePagination(response.data.total_pages);
+    setLoading(false);
 
   };
 
@@ -46,25 +50,15 @@ function App() {
   return (
     <div className="App text-center">
       <h1>Star War Heros</h1>
-      <input type="text" placeholder="Seach your star" value={searchInput} onChange={(e) =>setSearchInput(e.target.value)}/>
+      <input type="text" placeholder="seach your star here" value={searchInput} onChange={(e) =>setSearchInput(e.target.value)}/>
       <ul className="list-group my-4">
-        {getFilteredResults()?.length > 0 ?
+        {loading ? 'Loading....' :  getFilteredResults()?.length > 0 ?
           getFilteredResults()?.map((starWar: any) => {
            //  return <Card key={starWar.uid} starWar={starWar} />;
             return <li className="list-item" key={starWar.uid}>{starWar.name}</li>
           }): 'No results found'}
       </ul>
-     <div className="btn-group">
-    
-        <button className="btn btn-light" disabled={!data.previous} onClick={() => fetchData(data.previous)}>Prev </button>
-    
-      {paginations.length > 0 && paginations.map((page:string,index:number) => {
-       return <button className="btn btn-light" key={`p-${index}`} onClick={() => fetchData(page)}>{index +1}</button> 
-      })}
-    
-        <button className="btn btn-light" disabled={!data.next} onClick={() => fetchData(data.next)}> Next </button>
-    
-      </div>
+     <Pagination paginations={paginations} fetch={(url:string) => fetchData(url)} data={data} />
 
     </div>
   );
