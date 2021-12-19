@@ -50,20 +50,20 @@ function App() {
       <ul className="list-group my-4">
         {getFilteredResults()?.length > 0 ?
           getFilteredResults()?.map((starWar: any) => {
-            // return <Card key={starWar.uid} starWar={starWar} />;
+           //  return <Card key={starWar.uid} starWar={starWar} />;
             return <li className="list-item" key={starWar.uid}>{starWar.name}</li>
           }): 'No results found'}
       </ul>
      <div className="btn-group">
-      {data.previous && (
-        <button className="btn btn-light" onClick={() => fetchData(data.previous)}>Prev </button>
-      )}
+    
+        <button className="btn btn-light" disabled={!data.previous} onClick={() => fetchData(data.previous)}>Prev </button>
+    
       {paginations.length > 0 && paginations.map((page:string,index:number) => {
        return <button className="btn btn-light" key={`p-${index}`} onClick={() => fetchData(page)}>{index +1}</button> 
       })}
-      {data.next && (
-        <button className="btn btn-light" onClick={() => fetchData(data.next)}> Next </button>
-      )}
+    
+        <button className="btn btn-light" disabled={!data.next} onClick={() => fetchData(data.next)}> Next </button>
+    
       </div>
 
     </div>

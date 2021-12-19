@@ -14,12 +14,12 @@ function Card({starWar}:any) {
        }
        fetchStarInfo();
 
-    }, [])
+    }, [starWar])
 
     return (
         <>
         { Object.keys(properties).length !== 0 ?
-            <div className="my-2" style={{"width": "18rem"}}>
+            <div className="card my-2" style={{"width": "18rem"}}>
             <div className="card-body">
                 <h5 className="card-title">{properties?.name}</h5>
                 <p className="card-text">height: {properties?.height}</p>
